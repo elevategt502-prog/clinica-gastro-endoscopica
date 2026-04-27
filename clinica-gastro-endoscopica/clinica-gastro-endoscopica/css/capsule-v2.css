@@ -1,0 +1,633 @@
+/* ============================================================
+   CÁPSULA ENDOSCÓPICA v2 — Enhanced Section Styles
+   Depends on: css/styles.css (custom properties already defined)
+   ============================================================ */
+
+/* ── Section Reset & Full-Width Override ── */
+#capsula {
+  background: linear-gradient(135deg, #061828 0%, #0A2342 40%, #0d2d55 100%);
+  position: relative;
+  overflow: hidden;
+  /* override any inherited background from .capsule */
+  padding: var(--section-pad) 0;
+}
+
+/* ── Animated Background Orbs ── */
+#capsula::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(46, 134, 171, 0.15), transparent 70%);
+  top: -200px;
+  right: -200px;
+  border-radius: 50%;
+  animation: orbFloat 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#capsula::after {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.1), transparent 70%);
+  bottom: -160px;
+  left: -160px;
+  border-radius: 50%;
+  animation: orbFloat 10s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes orbFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, -20px) scale(1.05); }
+  100% { transform: translate(-20px, 30px) scale(0.96); }
+}
+
+/* Dot pattern overlay */
+#capsula .capsule-dot-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* All direct children containers sit above orbs */
+#capsula > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Section Header ── */
+#capsula .section-header {
+  text-align: center;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+#capsula .capsule-eyebrow {
+  color: var(--gold);
+}
+
+#capsula .capsule-title {
+  color: var(--white);
+}
+
+#capsula .divider-gold {
+  margin: 18px auto 0;
+}
+
+.capsule-badge-text {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 1rem;
+  color: var(--gold-light);
+  font-weight: 700;
+  font-style: italic;
+  padding: 12px 24px;
+  border-left: 3px solid var(--gold);
+  border-right: 3px solid var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+  border-radius: var(--radius-sm);
+  max-width: 620px;
+}
+
+/* ── Intro Description ── */
+.capsule-intro-text {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 1.85;
+  max-width: 700px;
+  margin: 16px auto 0;
+  text-align: center;
+}
+.capsule-intro-text strong {
+  color: var(--white);
+}
+
+/* ============================================================
+   SVG DIAGRAM SECTION
+   ============================================================ */
+.capsule-diagram-wrapper {
+  width: 100%;
+  padding: clamp(24px, 4vw, 48px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.capsule-diagram-title {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.capsule-journey-svg {
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  overflow: visible;
+}
+
+/* Digestive tract path styling */
+.digestive-path {
+  fill: none;
+  stroke: rgba(46, 134, 171, 0.35);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.digestive-path-highlight {
+  fill: none;
+  stroke: rgba(46, 134, 171, 0.7);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  transition: stroke-dashoffset 0.05s linear;
+}
+
+/* The animated capsule pill that travels along the path */
+.capsule-pill-group {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.capsule-pill-group.visible {
+  opacity: 1;
+}
+
+/* Organ labels along the path */
+.organ-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  fill: rgba(255, 255, 255, 0.0);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: fill 0.4s ease;
+}
+.organ-label.revealed {
+  fill: rgba(255, 255, 255, 0.75);
+}
+
+.organ-dot {
+  fill: rgba(46, 134, 171, 0.0);
+  transition: fill 0.4s ease;
+}
+.organ-dot.revealed {
+  fill: var(--sky);
+}
+
+/* Diagram stats strip */
+.capsule-stats-strip {
+  display: flex;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 48px);
+  flex-wrap: wrap;
+  padding: 20px clamp(16px, 4vw, 48px);
+  margin-top: 0;
+}
+
+.capsule-stat-item {
+  text-align: center;
+}
+
+.capsule-stat-item .stat-number {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.capsule-stat-item .stat-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   COMPARISON TABLE
+   ============================================================ */
+.comparison-table {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin: clamp(32px, 5vw, 60px) auto;
+  max-width: 900px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.comparison-col {
+  padding: clamp(24px, 3vw, 36px);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.comparison-col--traditional {
+  border-color: rgba(170, 170, 170, 0.25);
+  border-right: none;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.comparison-col--capsule {
+  border-color: rgba(201, 168, 76, 0.4);
+  border-left: none;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: rgba(201, 168, 76, 0.06);
+  position: relative;
+}
+
+.comparison-col--capsule::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 0;
+}
+
+.comparison-col h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.comparison-col--capsule h3 {
+  color: var(--gold-light);
+}
+
+.comparison-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(8px, 1.5vw, 18px);
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-heading);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  writing-mode: vertical-lr;
+  letter-spacing: 0.15em;
+}
+
+.comparison-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.comparison-row:first-of-type {
+  padding-top: 0;
+}
+
+.comparison-label {
+  flex: 1;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+}
+
+.comparison-value {
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.comparison-check {
+  color: #22c55e;
+}
+
+.comparison-x {
+  color: #ef4444;
+}
+
+/* Mobile: stack the table */
+@media (max-width: 600px) {
+  .comparison-table {
+    grid-template-columns: 1fr;
+  }
+  .comparison-divider {
+    writing-mode: horizontal-tb;
+    padding: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: none;
+    border-bottom: none;
+    text-align: center;
+  }
+  .comparison-col--traditional {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-right: 1px solid rgba(170, 170, 170, 0.25);
+    border-bottom: none;
+  }
+  .comparison-col--capsule {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    border-left: 1px solid rgba(201, 168, 76, 0.4);
+    border-top: none;
+  }
+  .comparison-col--capsule::before {
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   CONDITIONS CHECKLIST
+   ============================================================ */
+.conditions-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.condition-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.condition-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.92rem;
+  font-weight: 600;
+  /* reveal state — starts invisible, JS adds .revealed */
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.45s ease, transform 0.45s ease, background 0.25s ease;
+}
+
+.condition-item.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.condition-item:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+/* Stagger delays for condition items */
+.condition-item:nth-child(1) { transition-delay: 0s; }
+.condition-item:nth-child(2) { transition-delay: 0.07s; }
+.condition-item:nth-child(3) { transition-delay: 0.14s; }
+.condition-item:nth-child(4) { transition-delay: 0.21s; }
+.condition-item:nth-child(5) { transition-delay: 0.28s; }
+.condition-item:nth-child(6) { transition-delay: 0.35s; }
+.condition-item:nth-child(7) { transition-delay: 0.42s; }
+
+/* SVG check icon inside condition items */
+.condition-check-svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+}
+
+.condition-check-path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.condition-item.revealed .condition-check-path {
+  stroke-dashoffset: 0;
+}
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+.faq-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 28px;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+.faq-section {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.faq-item.faq-open {
+  border-color: rgba(201, 168, 76, 0.45);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.3s ease;
+}
+
+.faq-item.faq-open .faq-question {
+  color: var(--gold-light);
+}
+
+.faq-chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+}
+
+.faq-item.faq-open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--gold);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer-inner {
+  padding: 0 22px 20px;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.8;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 14px;
+}
+
+/* ============================================================
+   CTA ZONE
+   ============================================================ */
+.capsule-cta-zone {
+  text-align: center;
+  margin-top: clamp(40px, 6vw, 64px);
+  padding-bottom: clamp(8px, 2vw, 20px);
+}
+
+.capsule-cta-zone .btn-gold {
+  font-size: 1rem;
+  padding: 16px 40px;
+  box-shadow: 0 6px 32px rgba(201, 168, 76, 0.45);
+}
+
+.capsule-cta-zone .btn-gold:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px rgba(201, 168, 76, 0.6);
+}
+
+/* ============================================================
+   SECTION SPACING HELPERS
+   ============================================================ */
+.capsule-section-gap {
+  margin-top: clamp(48px, 7vw, 88px);
+}
+
+.capsule-section-gap-sm {
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+/* ============================================================
+   REDUCED MOTION SUPPORT
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  #capsula::before,
+  #capsula::after {
+    animation: none;
+  }
+  .digestive-path-highlight {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .condition-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .condition-check-path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .faq-answer {
+    transition: max-height 0.15s ease;
+  }
+  .faq-chevron {
+    transition: transform 0.15s ease;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 767px) {
+  .condition-list {
+    grid-template-columns: 1fr;
+  }
+
+  .capsule-stats-strip {
+    gap: 20px;
+  }
+
+  .comparison-table {
+    font-size: 0.85rem;
+  }
+
+  .faq-question {
+    font-size: 0.9rem;
+    padding: 16px 18px;
+  }
+
+  .faq-answer-inner {
+    padding: 0 18px 18px;
+    padding-top: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .condition-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .condition-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
