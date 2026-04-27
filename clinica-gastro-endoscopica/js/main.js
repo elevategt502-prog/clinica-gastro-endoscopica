@@ -63,6 +63,10 @@ hamburger.addEventListener('click', () => {
   document.body.style.overflow = isOpen ? 'hidden' : '';
 });
 
+// Close button inside overlay
+const navCloseBtn = document.getElementById('nav-close');
+if (navCloseBtn) navCloseBtn.addEventListener('click', closeMenu);
+
 // Close on nav link click
 navList.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', closeMenu);
